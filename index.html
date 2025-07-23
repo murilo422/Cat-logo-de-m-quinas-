@@ -1,116 +1,110 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Catálogo de Máquinas</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      background: #fff7f2;
-      color: #333;
-    }
-    header {
-      background: #1a1a1a;
-      color: #fff;
-      padding: 1rem;
-      text-align: center;
-      font-size: 1.5rem;
-      font-weight: bold;
-    }
-    .catalogo {
-      max-width: 1000px;
-      margin: auto;
-      padding: 2rem 1rem;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 2rem;
-      justify-content: center;
-    }
-    .produto {
-      background: white;
-      border-radius: 12px;
-      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-      width: 300px;
-      padding: 1rem;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      transition: transform 0.3s;
-    }
-    .produto:hover {
-      transform: scale(1.03);
-    }
-    .produto img {
-      width: 100%;
-      height: auto;
-      border-radius: 10px;
-      object-fit: cover;
-      margin-bottom: 1rem;
-    }
-    .produto h2 {
-      font-size: 1.2rem;
-      margin: 0.5rem 0;
-    }
-    .produto p {
-      font-weight: bold;
-      color: #d35400;
-      margin: 0.5rem 0 1rem 0;
-    }
-    .produto button {
-      background-color: #d35400;
-      color: white;
-      border: none;
-      padding: 0.8rem 1.2rem;
-      border-radius: 6px;
-      cursor: pointer;
-      font-size: 1rem;
-      transition: background 0.2s;
-    }
-    .produto button:hover {
-      background-color: #b84300;
-    }
-  </style>
-</head>
-<body>
+import { Card, CardContent } from "@/components/ui/card"; import { Button } from "@/components/ui/button"; import { PhoneCall, Search, Star, ShoppingCart, CheckCircle2 } from "lucide-react"; import Image from "next/image"; import { useState } from "react"; import { motion } from "framer-motion";
 
-  <header>🛠️ Catálogo de Máquinas</header>
+const items = [ { name: "Guarda-Roupa 6 Portas", description: "Design moderno com amplo espaço interno.", image: "https://images.unsplash.com/photo-1601979031925-2b60c228cafa?auto=format&fit=crop&w=800&q=80", category: "Quarto", }, { name: "Cômoda 5 Gavetas", description: "Compacta e ideal para qualquer ambiente.", image: "https://images.unsplash.com/photo-1582582494700-040fd3a4de76?auto=format&fit=crop&w=800&q=80", category: "Quarto", }, { name: "Armário de Cozinha", description: "Ótima organização com prateleiras reforçadas.", image: "https://images.unsplash.com/photo-1598300053654-8974a9b8e35b?auto=format&fit=crop&w=800&q=80", category: "Cozinha", }, { name: "Mesa de Jantar 6 Lugares", description: "Tampo de vidro e acabamento premium.", image: "https://images.unsplash.com/photo-1616627983260-59c2a1e9eb9d?auto=format&fit=crop&w=800&q=80", category: "Sala de Jantar", }, { name: "Painel para TV 65”", description: "Design elegante e espaço para decoração.", image: "https://images.unsplash.com/photo-1618221195710-c84e8ab9006b?auto=format&fit=crop&w=800&q=80", category: "Sala de Estar", }, { name: "Cama Box Casal", description: "Conforto e durabilidade com ótimo custo-benefício.", image: "https://images.unsplash.com/photo-1585556271024-c7b5b6c0187a?auto=format&fit=crop&w=800&q=80", category: "Quarto", }, ];
 
-  <div class="catalogo" id="catalogo"></div>
+const reviews = [ { name: "Juliana R.", review: "Entrega rápida e o móvel é perfeito!" }, { name: "Carlos S.", review: "Comprei a cômoda, excelente acabamento." }, { name: "Amanda T.", review: "Ótimo atendimento e qualidade surpreendente." }, ];
 
-  <script>
-    const produtos = [
-      {
-        nome: "Motosserra 52cc",
-        preco: "R$ 799,00",
-        imagem: "https://i.postimg.cc/wvXQ6fpP/motosserra.jpg"
-      },
-      {
-        nome: "Lixadeira Orbital",
-        preco: "R$ 299,00",
-        imagem: "https://i.imgur.com/N07ZUp1.jpg"
-      },
-      {
-        nome: "Serradeira Profissional",
-        preco: "R$ 1.399,00",
-        imagem: "https://i.imgur.com/1xvAfHc.jpg"
-      }
-    ];
+export default function CatalogoPage() { const [search, setSearch] = useState(""); const [selectedCategory, setSelectedCategory] = useState("Todos"); const [cart, setCart] = useState([]);
 
-    const container = document.getElementById('catalogo');
-    produtos.forEach(produto => {
-      const card = document.createElement('div');
-      card.className = 'produto';
-      card.innerHTML = `
-        <img src="${produto.imagem}" alt="${produto.nome}" />
-        <h2>${produto.nome}</h2>
-        <p>${produto.preco}</p>
-        <button>Comprar</button>
-      `;
-      container.appendChild(card);
-    });
-  </script>
+const filteredItems = items.filter( (item) => item.name.toLowerCase().includes(search.toLowerCase()) && (selectedCategory === "Todos" || item.category === selectedCategory) );
 
-</body>
-</html>
+const categories = ["Todos", ...new Set(items.map((i) => i.category))];
+
+const toggleCart = (item) => { if (cart.includes(item)) { setCart(cart.filter((i) => i !== item)); } else { setCart([...cart, item]); } };
+
+const generateWhatsAppLink = () => { const message = Olá! Gostaria de solicitar orçamento dos seguintes produtos:\n\n${cart .map((item) => • ${item.name}) .join("\n")}; return https://wa.me/5535999462924?text=${encodeURIComponent(message)}; };
+
+return ( <div className="min-h-screen bg-gradient-to-br from-blue-100 to-blue-200 text-black p-6"> <header className="text-center mb-10"> <h1 className="text-5xl font-extrabold text-black mb-4"> Catálogo de Móveis Premium </h1> <p className="text-gray-700 text-lg max-w-xl mx-auto"> Os móveis mais elegantes e modernos para transformar seu ambiente. Faça seu pedido pelo WhatsApp com facilidade e segurança. </p> <div className="mt-6 flex flex-col items-center gap-4"> <div className="flex items-center bg-white shadow-md rounded-full px-4 py-2 w-full max-w-md"> <Search className="text-gray-500 mr-2" size={20} /> <input type="text" placeholder="Buscar produto..." value={search} onChange={(e) => setSearch(e.target.value)} className="w-full bg-transparent outline-none text-gray-800" /> </div> <div className="flex gap-2 flex-wrap justify-center"> {categories.map((cat) => ( <button key={cat} onClick={() => setSelectedCategory(cat)} className={px-4 py-1 rounded-full text-sm font-medium ${ selectedCategory === cat ? "bg-blue-800 text-white" : "bg-white text-gray-800" }} > {cat} </button> ))} </div> </div> </header>
+
+<motion.div
+    className="grid grid-cols-1 md:grid-cols-3 gap-6"
+    initial={{ opacity: 0 }}
+    animate={{ opacity: 1 }}
+    transition={{ duration: 0.8 }}
+  >
+    {filteredItems.length > 0 ? (
+      filteredItems.map((item, index) => (
+        <motion.div
+          key={index}
+          whileHover={{ scale: 1.05 }}
+          className="transition-transform"
+        >
+          <Card className="bg-white shadow-xl rounded-2xl">
+            <Image
+              src={item.image}
+              alt={item.name}
+              width={500}
+              height={300}
+              className="rounded-t-2xl w-full h-64 object-cover"
+            />
+            <CardContent className="p-4">
+              <h2 className="text-xl font-semibold text-blue-800 mb-2">
+                {item.name}
+              </h2>
+              <p className="text-gray-700 mb-4">{item.description}</p>
+              <button
+                onClick={() => toggleCart(item)}
+                className={`w-full flex items-center justify-center gap-2 py-2 px-4 rounded-lg text-white ${
+                  cart.includes(item) ? "bg-green-600" : "bg-blue-800 hover:bg-black"
+                }`}
+              >
+                {cart.includes(item) ? <CheckCircle2 size={18} /> : <ShoppingCart size={18} />}
+                {cart.includes(item) ? "Adicionado" : "Solicitar orçamento"}
+              </button>
+            </CardContent>
+          </Card>
+        </motion.div>
+      ))
+    ) : (
+      <p className="text-center col-span-full text-gray-600 text-lg">
+        Nenhum produto encontrado.
+      </p>
+    )}
+  </motion.div>
+
+  {cart.length > 0 && (
+    <div className="mt-12 text-center">
+      <h3 className="text-xl font-semibold mb-2">Orçamento com {cart.length} produto(s) selecionado(s)</h3>
+      <a
+        href={generateWhatsAppLink()}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="inline-block bg-green-600 text-white px-6 py-3 rounded-full hover:bg-green-700"
+      >
+        Enviar Orçamento via WhatsApp
+      </a>
+    </div>
+  )}
+
+  <section className="mt-16">
+    <h2 className="text-3xl font-bold text-center mb-8">O que nossos clientes dizem</h2>
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      {reviews.map((r, i) => (
+        <div key={i} className="bg-white rounded-xl shadow-md p-6">
+          <div className="flex items-center mb-2 text-yellow-500">
+            {[...Array(5)].map((_, idx) => (
+              <Star key={idx} size={16} />
+            ))}
+          </div>
+          <p className="text-gray-800 italic">“{r.review}”</p>
+          <p className="mt-2 font-semibold text-blue-700">— {r.name}</p>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <footer className="mt-20 text-center text-sm text-gray-600">
+    © {new Date().getFullYear()} Catálogo Móveis | Desenvolvido com ❤ por Murilo & Fabrício
+  </footer>
+
+  <a
+    href="https://wa.me/5535999462924"
+    target="_blank"
+    rel="noopener noreferrer"
+    className="fixed bottom-5 right-5 bg-green-500 hover:bg-green-600 text-white p-4 rounded-full shadow-lg"
+  >
+    <PhoneCall size={24} />
+  </a>
+</div>
+
+); }
