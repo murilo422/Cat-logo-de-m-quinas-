@@ -1,1 +1,122 @@
 Adiciona index.html com código do site catálogo
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Catálogo de Máquinas</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #fff7f0;
+      margin: 0;
+      padding: 20px;
+      color: #4a2f0b;
+    }
+    h1 {
+      text-align: center;
+      color: #d35400;
+    }
+    .produtos {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 20px;
+      margin-top: 30px;
+    }
+    .produto {
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgb(0 0 0 / 0.15);
+      padding: 15px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      transition: transform 0.2s;
+    }
+    .produto:hover {
+      transform: scale(1.05);
+    }
+    .produto img {
+      width: 100%;
+      max-height: 180px;
+      object-fit: cover;
+      border-radius: 8px;
+    }
+    .nome-produto {
+      font-weight: bold;
+      margin: 15px 0 8px;
+      color: #d35400;
+      font-size: 18px;
+      text-align: center;
+    }
+    .preco {
+      font-weight: bold;
+      margin-bottom: 12px;
+      color: #e67e22;
+      font-size: 16px;
+    }
+    .btn-comprar {
+      background-color: #d35400;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      padding: 10px 15px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: background-color 0.3s;
+      width: 100%;
+    }
+    .btn-comprar:hover {
+      background-color: #e67e22;
+    }
+    @media (max-width: 480px) {
+      body {
+        padding: 10px;
+      }
+      .produtos {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <h1>Catálogo de Máquinas</h1>
+  <div class="produtos" id="produtos"></div>
+
+  <script>
+    const produtos = [
+      {
+        nome: "Motosserra 52cc",
+        preco: "R$ 799,00",
+        imagem: "https://images.unsplash.com/photo-1606733737693-d2d8cf76d5b0?auto=format&fit=crop&w=400&q=80",
+      },
+      {
+        nome: "Lixadeira Orbital",
+        preco: "R$ 299,00",
+        imagem: "https://images.unsplash.com/photo-1584382291481-5b156a97e5e9?auto=format&fit=crop&w=400&q=80",
+      },
+      {
+        nome: "Serradeira Profissional",
+        preco: "R$ 1.399,00",
+        imagem: "https://images.unsplash.com/photo-1630072320626-7c470e0aa2fa?auto=format&fit=crop&w=400&q=80",
+      },
+    ];
+
+    const container = document.getElementById("produtos");
+
+    produtos.forEach(produto => {
+      const div = document.createElement("div");
+      div.className = "produto";
+
+      div.innerHTML = `
+        <img src="${produto.imagem}" alt="${produto.nome}" />
+        <div class="nome-produto">${produto.nome}</div>
+        <div class="preco">${produto.preco}</div>
+        <button class="btn-comprar" onclick="alert('Compra do produto: ${produto.nome} em breve!')">Comprar</button>
+      `;
+
+      container.appendChild(div);
+    });
+  </script>
+</body>
+</html>
